@@ -4,6 +4,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="dotnetPiPictureFrame.MainWindow"
-        Title="dotnetPiPictureFrame">
-    Welcome to Avalonia!
+        Title="Picture Frame"
+        SystemDecorations="None"
+        Background="#011627">
+    <Window.Resources>
+    
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Margin ="20" FontSize="38" FontFamily="Consolas" Text="{Binding Weather}" Foreground="Green"></TextBlock>
+        <TextBlock Grid.Row="2" Margin ="20" FontSize="38" FontFamily="Consolas" Text="{Binding Time}" Foreground="Green"></TextBlock>
+        <Image x:Name="PhotoImage" Grid.Row="1" />
+    </Grid>
 </Window>
