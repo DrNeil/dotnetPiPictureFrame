@@ -15,7 +15,7 @@ namespace dotnetPiPictureFrame
         WeatherClient client = new WeatherClient(Config.OpenWeather);
         const int checkWeatherPeriod = 60*30;
         int weatherPeriodSeconds = 0;
-        int updatePhotoPeriod = 10;
+        int updatePhotoPeriod = 1;
         int photoPeriodSeconds = 0;
         Image? photoImage;
 
@@ -30,10 +30,8 @@ namespace dotnetPiPictureFrame
         async Task UpdateGUI()
         {
             var files = (Directory.GetFiles(Config.PhotosFolder, "*.jpg").Union(Directory.GetFiles(Config.PhotosFolder, "*.png"))).ToArray();
-            
             int currentPhoto = 0;
-            viewModel.PhotoPath = files[currentPhoto];
-            bool photoDisplayed = true;
+            bool photoDisplayed = false;
 
             viewModel.CurrentWeather = client.GetCurrentWeather(cityName: Config.WeatherCity, measurement: Measurement.Metric);
             while (true)
@@ -56,7 +54,7 @@ namespace dotnetPiPictureFrame
                         updatePhotoPeriod = 1;
                         photoDisplayed = false;
                     }
-                    else
+                    else if (files.Length > 0)
                     {
                         currentPhoto++;
                         if (currentPhoto >= files.Length)
