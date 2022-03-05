@@ -51,8 +51,8 @@ namespace dotnetPiPictureFrame
                 {
                     if (photoDisplayed)
                     {
-                        Dispatcher.UIThread.Post(() => photoImage.Classes.Add("exiting"));
-                        Dispatcher.UIThread.Post(() => photoImage.Classes.Remove("entering"));
+                        Dispatcher.UIThread.Post(() => photoImage?.Classes.Add("exiting"));
+                        Dispatcher.UIThread.Post(() => photoImage?.Classes.Remove("entering"));
                         updatePhotoPeriod = 1;
                         photoDisplayed = false;
                     }
@@ -64,8 +64,8 @@ namespace dotnetPiPictureFrame
                             currentPhoto = 0;
                         }
                         viewModel.PhotoPath = files[currentPhoto];
-                        Dispatcher.UIThread.Post(() => photoImage.Classes.Add("entering"));
-                        Dispatcher.UIThread.Post(() => photoImage.Classes.Remove("exiting"));
+                        Dispatcher.UIThread.Post(() => photoImage?.Classes.Add("entering"));
+                        Dispatcher.UIThread.Post(() => photoImage?.Classes.Remove("exiting"));
                         updatePhotoPeriod = 10;
                         photoDisplayed = true;
                     }
