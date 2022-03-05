@@ -9,7 +9,8 @@
         SystemDecorations="None"
         WindowState="FullScreen"
         Topmost="true"
-        Background="#011627">
+        Background="#011627"
+        Cursor="None">
     <Window.Resources>
       <local:TimeConverter x:Key="timeConverter"/>
       <local:WeatherConverter x:Key="weatherConverter"/>
