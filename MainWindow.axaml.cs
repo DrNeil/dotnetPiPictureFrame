@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Threading;
 using System;
 using System.IO;
 using System.Linq;
@@ -14,21 +15,26 @@ namespace dotnetPiPictureFrame
         WeatherClient client = new WeatherClient(Config.OpenWeather);
         const int checkWeatherPeriod = 60*30;
         int weatherPeriodSeconds = 0;
-        const int updatePhotoPeriod = 10;
+        int updatePhotoPeriod = 10;
         int photoPeriodSeconds = 0;
+        Image? photoImage;
 
         public MainWindow()
         {
             InitializeComponent();
+            photoImage = this.FindControl<Image>("PhotoImage");
             DataContext = viewModel;
             Task.Run(async () => await UpdateGUI());
         }
 
-        private async Task UpdateGUI()
+        async Task UpdateGUI()
         {
             var files = (Directory.GetFiles(Config.PhotosFolder, "*.jpg").Union(Directory.GetFiles(Config.PhotosFolder, "*.png"))).ToArray();
-            int currentFile = 0;
-            viewModel.PhotoPath = files[currentFile];
+            
+            int currentPhoto = 0;
+            viewModel.PhotoPath = files[currentPhoto];
+            bool photoDisplayed = true;
+
             viewModel.CurrentWeather = client.GetCurrentWeather(cityName: Config.WeatherCity, measurement: Measurement.Metric);
             while (true)
             {
@@ -43,12 +49,26 @@ namespace dotnetPiPictureFrame
 
                 if (photoPeriodSeconds > updatePhotoPeriod)
                 {
-                    currentFile++;
-                    if (currentFile >= files.Length)
+                    if (photoDisplayed)
                     {
-                        currentFile = 0;
+                        Dispatcher.UIThread.Post(() => photoImage.Classes.Add("exiting"));
+                        Dispatcher.UIThread.Post(() => photoImage.Classes.Remove("entering"));
+                        updatePhotoPeriod = 1;
+                        photoDisplayed = false;
                     }
-                    viewModel.PhotoPath = files[currentFile];
+                    else
+                    {
+                        currentPhoto++;
+                        if (currentPhoto >= files.Length)
+                        {
+                            currentPhoto = 0;
+                        }
+                        viewModel.PhotoPath = files[currentPhoto];
+                        Dispatcher.UIThread.Post(() => photoImage.Classes.Add("entering"));
+                        Dispatcher.UIThread.Post(() => photoImage.Classes.Remove("exiting"));
+                        updatePhotoPeriod = 10;
+                        photoDisplayed = true;
+                    }
                     photoPeriodSeconds = 0;
                 }
                 photoPeriodSeconds++;
