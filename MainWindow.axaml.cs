@@ -56,12 +56,12 @@ namespace dotnetPiPictureFrame
                     }
                     else if (files.Length > 0)
                     {
+                        viewModel.PhotoPath = files[currentPhoto];
                         currentPhoto++;
                         if (currentPhoto >= files.Length)
                         {
                             currentPhoto = 0;
                         }
-                        viewModel.PhotoPath = files[currentPhoto];
                         Dispatcher.UIThread.Post(() => photoImage?.Classes.Add("entering"));
                         Dispatcher.UIThread.Post(() => photoImage?.Classes.Remove("exiting"));
                         updatePhotoPeriod = 10;
