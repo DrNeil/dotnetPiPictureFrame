@@ -2,22 +2,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:dotnetPiPictureFrame"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="dotnetPiPictureFrame.MainWindow"
         Title="Picture Frame"
         SystemDecorations="None"
         Background="#011627">
     <Window.Resources>
-    
+      <local:TimeConverter x:Key="timeConverter"/>
+      <local:WeatherConverter x:Key="weatherConverter"/>
+      <local:PhotoConverter x:Key="photoConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Margin ="20" FontSize="38" FontFamily="Consolas" Text="{Binding Weather}" Foreground="Green"></TextBlock>
-        <TextBlock Grid.Row="2" Margin ="20" FontSize="38" FontFamily="Consolas" Text="{Binding Time}" Foreground="Green"></TextBlock>
-        <Image x:Name="PhotoImage" Grid.Row="1" />
+        <Image x:Name="PhotoImage" Grid.Row="0" Grid.RowSpan="3" Source="{Binding PhotoPath, Converter={StaticResource photoConverter}}"/>  
+        <TextBlock Grid.Row="0" Margin ="5" FontSize="38" FontFamily="Consolas" Text="{Binding Weather, Converter={StaticResource weatherConverter}}" Foreground="Green"></TextBlock>
+        <TextBlock Grid.Row="2" Margin ="5" FontSize="38" FontFamily="Consolas" Text="{Binding Time, Converter={StaticResource timeConverter}}" Foreground="Green"></TextBlock>
     </Grid>
 </Window>

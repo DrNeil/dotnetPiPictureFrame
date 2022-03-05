@@ -19,7 +19,6 @@ public class FrameViewModel : ReactiveObject
     }
 
     WeatherModel? currentWeather;
-
     public WeatherModel? CurrentWeather
     {
         get => currentWeather;
