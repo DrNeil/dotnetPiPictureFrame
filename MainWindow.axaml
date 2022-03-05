@@ -7,6 +7,8 @@
         x:Class="dotnetPiPictureFrame.MainWindow"
         Title="Picture Frame"
         SystemDecorations="None"
+        WindowState="FullScreen"
+        Topmost="true"
         Background="#011627">
     <Window.Resources>
       <local:TimeConverter x:Key="timeConverter"/>
