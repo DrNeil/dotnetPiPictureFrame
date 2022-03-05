@@ -1,4 +1,4 @@
-internal static class Keys
+internal static class Config
 {
     internal const string OpenWeather = "<your open weather key goes here>";
     internal const string WeatherCity = "Sydney, NSW";
