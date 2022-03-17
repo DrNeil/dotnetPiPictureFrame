@@ -69,5 +69,6 @@
         <TextBlock Grid.Row="0" Margin ="5" Classes="info" Text="{Binding CurrentWeather, Converter={StaticResource weatherConverter}}" />
         <TextBlock Grid.Row="2" Margin ="6" Classes="back" Text="{Binding Time, Converter={StaticResource timeConverter}}" />
         <TextBlock Grid.Row="2" Margin ="5" Classes="info" Text="{Binding Time, Converter={StaticResource timeConverter}}" />
+        <Image x:Name="FrameImage" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Right" Width="400" Height="300" />
     </Grid>
 </Window>
