@@ -20,7 +20,7 @@ namespace dotnetPiPictureFrame
         int updatePhotoPeriod = 1;
         int photoPeriodSeconds = 0;
         Image? photoImage;
-        string VideoUrl => @"http://yellowpi:8080/Video";
+        
         Image frameImage;
         Bitmap? frameBmp;
         public MainWindow()
@@ -86,7 +86,7 @@ namespace dotnetPiPictureFrame
             {
                 HttpClient client = new HttpClient();
 
-                using HttpResponseMessage response = await client.GetAsync(VideoUrl, HttpCompletionOption.ResponseHeadersRead);
+                using HttpResponseMessage response = await client.GetAsync(Config.VideoUrl, HttpCompletionOption.ResponseHeadersRead);
 
                 using HttpContent content = response.Content;
                 using var stream = await content.ReadAsStreamAsync();
