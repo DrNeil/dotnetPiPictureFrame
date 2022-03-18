@@ -25,6 +25,7 @@ internal static class Config
     internal const string OpenWeather = "your open weather key";
     internal const string WeatherCity = "Sydeny, NSW";
     internal const string PhotosFolder = @"folder to your photos";
+    internal const string VideoUrl = @"http://raspberrypi:8080/Video";
 }
 ```
 
