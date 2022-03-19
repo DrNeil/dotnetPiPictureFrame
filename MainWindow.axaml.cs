@@ -87,51 +87,53 @@ namespace dotnetPiPictureFrame
                 HttpClient client = new HttpClient();
 
                 using HttpResponseMessage response = await client.GetAsync(Config.VideoUrl, HttpCompletionOption.ResponseHeadersRead);
-
-                using HttpContent content = response.Content;
-                using var stream = await content.ReadAsStreamAsync();
-
-                byte[] buffer = new byte[4096];
-                var lengthMarker = "Content-Length:";
-                var endMarker = "\r\n\r\n";
-
-                while (true)
+                if (response.IsSuccessStatusCode)
                 {
-                    try
-                    {
-                        Array.Fill<byte>(buffer, 0, 0, buffer.Length);
-                        int len = await stream.ReadAsync(buffer, 0, buffer.Length);
-                        var header = System.Text.Encoding.Default.GetString(buffer);
+                    using HttpContent content = response.Content;
+                    using var stream = await content.ReadAsStreamAsync();
 
-                        var lengthStart = header.IndexOf(lengthMarker) + lengthMarker.Length;
-                        var lengthEnd = header.IndexOf(endMarker);
-                        if (lengthEnd > lengthStart)
+                    byte[] buffer = new byte[4096];
+                    var lengthMarker = "Content-Length:";
+                    var endMarker = "\r\n\r\n";
+
+                    while (true)
+                    {
+                        try
                         {
-                            var lengthString = header.Substring(lengthStart, lengthEnd - lengthStart);
+                            Array.Fill<byte>(buffer, 0, 0, buffer.Length);
+                            int len = await stream.ReadAsync(buffer, 0, buffer.Length);
+                            var header = System.Text.Encoding.Default.GetString(buffer);
 
-                            int frameSize = int.Parse(lengthString);
-                            byte[] frameBuffer = new byte[frameSize];
-
-                            int totalBytesCopied = (int)len - (lengthEnd + endMarker.Length);
-                            if (totalBytesCopied > 0)
+                            var lengthStart = header.IndexOf(lengthMarker) + lengthMarker.Length;
+                            var lengthEnd = header.IndexOf(endMarker);
+                            if (lengthEnd > lengthStart)
                             {
-                                Array.Copy(buffer, lengthEnd + endMarker.Length, frameBuffer, 0, totalBytesCopied);
-                            }
+                                var lengthString = header.Substring(lengthStart, lengthEnd - lengthStart);
 
-                            while (totalBytesCopied < frameSize)
-                            {
-                                totalBytesCopied += await stream.ReadAsync(frameBuffer, totalBytesCopied, frameBuffer.Length - totalBytesCopied);
-                                await Task.Yield();
-                            }
-                            using MemoryStream ms = new(frameBuffer);
-                            frameBmp = new Bitmap(ms);
+                                int frameSize = int.Parse(lengthString);
+                                byte[] frameBuffer = new byte[frameSize];
 
-                            await Dispatcher.UIThread.InvokeAsync(() => { frameImage.Source = frameBmp; });
+                                int totalBytesCopied = (int)len - (lengthEnd + endMarker.Length);
+                                if (totalBytesCopied > 0)
+                                {
+                                    Array.Copy(buffer, lengthEnd + endMarker.Length, frameBuffer, 0, totalBytesCopied);
+                                }
+
+                                while (totalBytesCopied < frameSize)
+                                {
+                                    totalBytesCopied += await stream.ReadAsync(frameBuffer, totalBytesCopied, frameBuffer.Length - totalBytesCopied);
+                                    await Task.Yield();
+                                }
+                                using MemoryStream ms = new(frameBuffer);
+                                frameBmp = new Bitmap(ms);
+
+                                await Dispatcher.UIThread.InvokeAsync(() => { frameImage.Source = frameBmp; });
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.ToString());
+                        }
                     }
                 }
             }
