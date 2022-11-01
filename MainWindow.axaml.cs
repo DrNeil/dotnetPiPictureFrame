@@ -31,8 +31,7 @@ namespace dotnetPiPictureFrame
         {
             var files = (Directory.GetFiles(Config.PhotosFolder, "*.jpg").Union(Directory.GetFiles(Config.PhotosFolder, "*.png"))).ToArray();
             int currentPhoto = 0;
-            bool photoDisplayed = false;
-
+            
             viewModel.CurrentWeather = client.GetCurrentWeather(cityName: Config.WeatherCity, measurement: Measurement.Metric);
             while (true)
             {
@@ -47,14 +46,7 @@ namespace dotnetPiPictureFrame
 
                 if (photoPeriodSeconds > updatePhotoPeriod)
                 {
-                    if (photoDisplayed)
-                    {
-                        Dispatcher.UIThread.Post(() => photoImage?.Classes.Add("exiting"));
-                        Dispatcher.UIThread.Post(() => photoImage?.Classes.Remove("entering"));
-                        updatePhotoPeriod = 1;
-                        photoDisplayed = false;
-                    }
-                    else if (files.Length > 0)
+                    if (files.Length > 0)
                     {
                         viewModel.PhotoPath = files[currentPhoto];
                         currentPhoto++;
@@ -62,10 +54,7 @@ namespace dotnetPiPictureFrame
                         {
                             currentPhoto = 0;
                         }
-                        Dispatcher.UIThread.Post(() => photoImage?.Classes.Add("entering"));
-                        Dispatcher.UIThread.Post(() => photoImage?.Classes.Remove("exiting"));
                         updatePhotoPeriod = 10;
-                        photoDisplayed = true;
                     }
                     photoPeriodSeconds = 0;
                 }
