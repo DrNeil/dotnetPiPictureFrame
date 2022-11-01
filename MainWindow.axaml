@@ -17,34 +17,6 @@
       <local:PhotoConverter x:Key="photoConverter"/>
     </Window.Resources>
   <Window.Styles>
-    <Style Selector="Image.exiting">
-      <Style.Animations>
-        <Animation Duration="0:0:2" FillMode="Forward">
-          <KeyFrame Cue="0%">
-            <Setter Property="Opacity" Value="1.0"/>
-            <Setter Property="TranslateTransform.X" Value="0.0"/>
-          </KeyFrame>
-          <KeyFrame Cue="100%">
-            <Setter Property="Opacity" Value="0.0"/>
-            <Setter Property="TranslateTransform.X" Value="1920.0"/>
-          </KeyFrame>
-        </Animation>
-      </Style.Animations>
-    </Style>
-    <Style Selector="Image.entering">
-      <Style.Animations>
-        <Animation Duration="0:0:2"  Delay="0:0:1" FillMode="Forward">
-          <KeyFrame Cue="0%">
-            <Setter Property="Opacity" Value="0.0"/>
-            <Setter Property="TranslateTransform.X" Value="-1920.0"/>
-          </KeyFrame>
-          <KeyFrame Cue="100%">
-            <Setter Property="Opacity" Value="1.0"/>
-            <Setter Property="TranslateTransform.X" Value="0.0"/>
-          </KeyFrame>
-        </Animation>
-      </Style.Animations>
-    </Style>
     <Style Selector="TextBlock.info">
       <Setter Property="FontSize" Value="38"/>
       <Setter Property="FontWeight" Value="Bold"/>
@@ -62,9 +34,18 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
-        <Image x:Name="PhotoImage" Opacity="0.0" Margin="5" Grid.Row="0" Grid.RowSpan="3" Source="{Binding PhotoPath, Converter={StaticResource photoConverter}}" />  
+      <TransitioningContentControl Grid.Row="0" Grid.RowSpan="3" Content="{Binding PhotoPath, Converter={StaticResource photoConverter}}" >
+          <TransitioningContentControl.PageTransition>
+              <PageSlide Orientation="Horizontal" Duration="0:00:00.500" />
+          </TransitioningContentControl.PageTransition>
+          <TransitioningContentControl.ContentTemplate>
+              <DataTemplate DataType="Bitmap">
+                  <Image Source="{Binding}"  />
+              </DataTemplate>
+          </TransitioningContentControl.ContentTemplate>
+      </TransitioningContentControl>
         <TextBlock Grid.Row="0" Margin ="6" Classes="back" Text="{Binding CurrentWeather, Converter={StaticResource weatherConverter}}" />
         <TextBlock Grid.Row="0" Margin ="5" Classes="info" Text="{Binding CurrentWeather, Converter={StaticResource weatherConverter}}" />
         <TextBlock Grid.Row="2" Margin ="6" Classes="back" Text="{Binding Time, Converter={StaticResource timeConverter}}" />
