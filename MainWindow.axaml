@@ -38,7 +38,10 @@
         </Grid.RowDefinitions>
       <TransitioningContentControl Grid.Row="0" Grid.RowSpan="3" Content="{Binding PhotoPath, Converter={StaticResource photoConverter}}" >
           <TransitioningContentControl.PageTransition>
-              <PageSlide Orientation="Horizontal" Duration="0:00:00.500" />
+            <CompositePageTransition>
+              <CrossFade Duration="0:00:00.500" />
+              <PageSlide Duration="0:00:00.500" Orientation="Horizontal" />
+            </CompositePageTransition>
           </TransitioningContentControl.PageTransition>
           <TransitioningContentControl.ContentTemplate>
               <DataTemplate DataType="Bitmap">
