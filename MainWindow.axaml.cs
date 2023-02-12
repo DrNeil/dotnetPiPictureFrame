@@ -23,8 +23,6 @@ namespace dotnetPiPictureFrame
         public MainWindow()
         {
             InitializeComponent();
-            viewModel.Bins = new Bins.BinCollection();
-            viewModel.Bins.GetBins(Config.Address);
             photoImage = this.FindControl<Image>("PhotoImage");
             DataContext = viewModel;
             Task.Run(async () => await UpdateGUI());
@@ -57,7 +55,8 @@ namespace dotnetPiPictureFrame
         async Task UpdateGUI()
         {
             int currentPhoto = 0;
-            _ = Task.Run(() => UpdatePhotos());
+            viewModel.Bins = new Bins.BinCollection();
+            _ = Task.Run(() => UpdatePhotos());await viewModel.Bins.GetBins(Config.Address);
             _ = Task.Run(() => UpdateWeather());
             while (true)
             {

@@ -13,7 +13,7 @@ namespace dotnetPiPictureFrame
 
             if (value is Bins.BinCollection binCollection)
             {
-                return $"{binCollection.PropertyLabel}, {binCollection.DaysToNextCollection},   {binCollection.Bins}";
+                return $"In {binCollection.DaysToNextCollection} day(s), {binCollection.Bins}";
             }
 
             throw new NotSupportedException();
