@@ -24,4 +24,11 @@ public class FrameViewModel : ReactiveObject
         get => currentWeather;
         set => this.RaiseAndSetIfChanged(ref currentWeather, value);  
     }
+
+    Bins.BinCollection? binCollection;
+    public Bins.BinCollection? Bins
+    {
+        get => binCollection;
+        set => this.RaiseAndSetIfChanged(ref binCollection, value);  
+    }
 }

@@ -24,6 +24,9 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.12" />
     <PackageReference Include="ReactiveUI" Version="17.1.50" />
     <PackageReference Include="Weather.NET" Version="1.3.0" />
-	<PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
+	  <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
+   </ItemGroup>
+   <ItemGroup>
+      <ProjectReference Include="..\bindays\bindays.csproj" />
    </ItemGroup>
 </Project>

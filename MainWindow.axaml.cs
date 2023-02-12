@@ -23,6 +23,8 @@ namespace dotnetPiPictureFrame
         public MainWindow()
         {
             InitializeComponent();
+            viewModel.Bins = new Bins.BinCollection();
+            viewModel.Bins.GetBins(Config.Address);
             photoImage = this.FindControl<Image>("PhotoImage");
             DataContext = viewModel;
             Task.Run(async () => await UpdateGUI());
