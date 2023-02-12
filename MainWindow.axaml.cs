@@ -55,8 +55,10 @@ namespace dotnetPiPictureFrame
         async Task UpdateGUI()
         {
             int currentPhoto = 0;
-            viewModel.Bins = new Bins.BinCollection();
-            _ = Task.Run(() => UpdatePhotos());await viewModel.Bins.GetBins(Config.Address);
+            var bins = new Bins.BinCollection();
+            await bins.GetBins(Config.Address);
+            viewModel.Bins = bins;
+            _ = Task.Run(() => UpdatePhotos());
             _ = Task.Run(() => UpdateWeather());
             while (true)
             {

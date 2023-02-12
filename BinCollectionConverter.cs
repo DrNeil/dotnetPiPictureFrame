@@ -13,7 +13,14 @@ namespace dotnetPiPictureFrame
 
             if (value is Bins.BinCollection binCollection)
             {
-                return $"In {binCollection.DaysToNextCollection} day(s), {binCollection.Bins}";
+                if (binCollection.Bins != null)
+                {
+                    return $"In {binCollection.DaysToNextCollection} day(s), {binCollection.Bins}";
+                }
+                else
+                {
+                    return "Cannot find bins to collect";
+                }
             }
 
             throw new NotSupportedException();
