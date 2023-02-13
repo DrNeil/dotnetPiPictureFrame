@@ -16,6 +16,7 @@
       <local:WeatherConverter x:Key="weatherConverter"/>
       <local:PhotoConverter x:Key="photoConverter"/>
       <local:BinCollectionConverter x:Key="binConverter"/>
+      <local:BinImageConverter x:Key="binImgConverter"/>
     </Window.Resources>
   <Window.Styles>
     <Style Selector="TextBlock.info">
@@ -54,8 +55,19 @@
         <TextBlock Grid.Row="0" Margin ="5" Classes="info" Text="{Binding CurrentWeather, Converter={StaticResource weatherConverter}}" />
         <TextBlock Grid.Row="2" Margin ="6" Classes="back" Text="{Binding Time, Converter={StaticResource timeConverter}}" />
         <TextBlock Grid.Row="2" Margin ="5" Classes="info" Text="{Binding Time, Converter={StaticResource timeConverter}}" />
-
-        <TextBlock Grid.Row="2" Margin ="6" HorizontalAlignment="Right" Classes="back" Text="{Binding Bins, Converter={StaticResource binConverter}}" />
-        <TextBlock Grid.Row="2" Margin ="5" HorizontalAlignment="Right" Classes="info" Text="{Binding Bins, Converter={StaticResource binConverter}}" />
+        <Grid Grid.Row="2" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Margin ="6" HorizontalAlignment="Right" Classes="back" Text="{Binding Bins, Converter={StaticResource binConverter}}" />
+            <TextBlock Grid.Column="0" Margin ="5" HorizontalAlignment="Right" Classes="info" Text="{Binding Bins, Converter={StaticResource binConverter}}" />
+            <Image Source="{Binding Bins, Converter={StaticResource binImgConverter}, ConverterParameter=0}" Grid.Column="1" Margin ="6" Classes="back" />
+            <Image Source="{Binding Bins, Converter={StaticResource binImgConverter}, ConverterParameter=2}" Grid.Column="2" Margin ="6" Classes="back" />
+            <Image Source="{Binding Bins, Converter={StaticResource binImgConverter}, ConverterParameter=4}" Grid.Column="3" Margin ="6" Classes="back" />
+        </Grid>
+        
     </Grid>
 </Window>
