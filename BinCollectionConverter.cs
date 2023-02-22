@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
@@ -14,21 +15,21 @@ namespace dotnetPiPictureFrame
             if (value == null)
                 return null;
 
-            if (value is Bins.BinCollection binCollection)
+            if (value is Bins.BinInfo binInfo)
             {
-                if (binCollection.Bins != null)
+                if (binInfo.Status == "OK")
                 {
-                    if (binCollection.DaysToNextCollection == 0)
+                    if (binInfo.DaysToNextCollection == 0)
                     {
                         return "Today";
                     }
-                    else if (binCollection.DaysToNextCollection == 1)
+                    else if (binInfo.DaysToNextCollection == 1)
                     {
                         return "Tomorrow";
                     }
-                    else if (binCollection.DaysToNextCollection > 1)
+                    else if (binInfo.DaysToNextCollection > 1)
                     {
-                        return $"In {binCollection.DaysToNextCollection} days";
+                        return $"In {binInfo.DaysToNextCollection} days";
                     }
                     else
                     {
@@ -61,14 +62,14 @@ namespace dotnetPiPictureFrame
             if (binString == null)
                 return null;
 
-            if (value is Bins.BinCollection binCollection)
+            if (value is Bins.BinInfo binInfo)
             {
                 var binNumber = int.Parse(binString);
-                if (binCollection.Bins != null
-                    && binCollection.Bins.Length > binNumber)
+                if (binInfo.Bins != null
+                    && binInfo.Bins.Count() > binNumber)
                 {
                     var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-                    var bitmap = new Bitmap(assets?.Open(new Uri($"avares://dotnetPiPictureFrame/Assets/{binCollection.Bins[binNumber]}.png")));
+                    var bitmap = new Bitmap(assets?.Open(new Uri($"avares://dotnetPiPictureFrame/Assets/{binInfo.Bins.ElementAt(binNumber)}.png")));
                     return bitmap;//new Bitmap(filepath);
                 }
                 else

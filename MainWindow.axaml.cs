@@ -56,8 +56,7 @@ namespace dotnetPiPictureFrame
         {
             int currentPhoto = 0;
             var bins = new Bins.BinCollection();
-            await bins.GetBins(Config.Address);
-            viewModel.Bins = bins;
+            viewModel.BinInfo = await bins.GetBins(Config.Address);
             _ = Task.Run(() => UpdatePhotos());
             _ = Task.Run(() => UpdateWeather());
             while (true)
