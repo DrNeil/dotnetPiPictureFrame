@@ -13,11 +13,12 @@ namespace dotnetPiPictureFrame
     {
         FrameViewModel viewModel = new FrameViewModel();
         WeatherClient client = new WeatherClient(Config.OpenWeather);
-        const int checkWeatherPeriod = 60*30;
-        int weatherPeriodSeconds = 0;
+        const int checkPeriod = 60*30;
+        int periodSeconds = 0;
         int updatePhotoPeriod = 1;
         int photoPeriodSeconds = 0;
         Image? photoImage;
+        string[] photoFiles;
 
         public MainWindow()
         {
@@ -27,30 +28,54 @@ namespace dotnetPiPictureFrame
             Task.Run(async () => await UpdateGUI());
         }
 
+        void UpdatePhotos()
+        {
+            if (Directory.Exists(Config.PhotosFolder))
+            {
+                photoFiles = (Directory.GetFiles(Config.PhotosFolder, "*.jpg").Union(Directory.GetFiles(Config.PhotosFolder, "*.png"))).ToArray();
+            }
+            else
+            {
+                photoFiles = new string[0];
+            }
+        }
+
+        async Task UpdateWeather()
+        {
+            try
+            {
+                viewModel.CurrentWeather = await client.GetCurrentWeatherAsync(cityName: Config.WeatherCity, measurement: Measurement.Metric);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         async Task UpdateGUI()
         {
-            var files = (Directory.GetFiles(Config.PhotosFolder, "*.jpg").Union(Directory.GetFiles(Config.PhotosFolder, "*.png"))).ToArray();
             int currentPhoto = 0;
-            
-            viewModel.CurrentWeather = client.GetCurrentWeather(cityName: Config.WeatherCity, measurement: Measurement.Metric);
+            _ = Task.Run(() => UpdatePhotos());
+            _ = Task.Run(() => UpdateWeather());
             while (true)
             {
                 viewModel.Time = DateTime.Now;
                 
-                if (weatherPeriodSeconds > checkWeatherPeriod)
+                if (periodSeconds > checkPeriod)
                 {
-                    viewModel.CurrentWeather = client.GetCurrentWeather(cityName: Config.WeatherCity, measurement: Measurement.Metric);
-                    weatherPeriodSeconds = 0;
+                    _ = Task.Run(() => UpdatePhotos());
+                    _ = Task.Run(() => UpdateWeather());
+                    periodSeconds = 0;
                 }
-                weatherPeriodSeconds++;
+                periodSeconds++;
 
                 if (photoPeriodSeconds > updatePhotoPeriod)
                 {
-                    if (files.Length > 0)
+                    if (photoFiles.Length > 0)
                     {
-                        viewModel.PhotoPath = files[currentPhoto];
+                        viewModel.PhotoPath = photoFiles[currentPhoto];
                         currentPhoto++;
-                        if (currentPhoto >= files.Length)
+                        if (currentPhoto >= photoFiles.Length)
                         {
                             currentPhoto = 0;
                         }
