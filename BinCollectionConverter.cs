@@ -17,7 +17,7 @@ namespace dotnetPiPictureFrame
 
             if (value is Bins.BinInfo binInfo)
             {
-                if (binInfo.Status == "OK")
+                if (binInfo.Status == Bins.InfoStatus.OK)
                 {
                     if (binInfo.DaysToNextCollection == 0)
                     {

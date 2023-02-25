@@ -18,7 +18,7 @@ namespace dotnetPiPictureFrame
         int updatePhotoPeriod = 1;
         int photoPeriodSeconds = 0;
         Image? photoImage;
-        string[] photoFiles;
+        string[]? photoFiles;
 
         public MainWindow()
         {
@@ -55,7 +55,7 @@ namespace dotnetPiPictureFrame
         async Task UpdateGUI()
         {
             int currentPhoto = 0;
-            var bins = new Bins.BinCollection();
+            var bins = new Bins.NorthernBeaches();
             viewModel.BinInfo = await bins.GetBins(Config.Address);
             _ = Task.Run(() => UpdatePhotos());
             _ = Task.Run(() => UpdateWeather());
@@ -73,7 +73,8 @@ namespace dotnetPiPictureFrame
 
                 if (photoPeriodSeconds > updatePhotoPeriod)
                 {
-                    if (photoFiles.Length > 0)
+                    if (null != photoFiles 
+                    && photoFiles.Length > 0)
                     {
                         viewModel.PhotoPath = photoFiles[currentPhoto];
                         currentPhoto++;
